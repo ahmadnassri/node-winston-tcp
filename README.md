@@ -1,6 +1,6 @@
-# Winston TCP Transport [![version][npm-version]][npm-url] [![License][npm-license]][license-url]
+# Winston TCP [![version][npm-version]][npm-url] [![License][npm-license]][license-url]
 
-Generic TCP Transport for Winston
+A TCP transport for [Winston](https://github.com/winstonjs/winston)
 
 [![Build Status][travis-image]][travis-url]
 [![Downloads][npm-downloads]][npm-url]
