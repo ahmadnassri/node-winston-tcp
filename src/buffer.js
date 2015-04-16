@@ -12,13 +12,15 @@ EntryBuffer.prototype.add = function (entry) {
 }
 
 EntryBuffer.prototype.drain = function (callback) {
-  this.buffer.reduceRight(function (buffer, entry) {
-    buffer.splice(-1)
+  if (callback) {
+    var i = this.buffer.length
 
-    if (callback) callback(entry)
+    while (i--) {
+      callback(this.buffer[i])
+    }
+  }
 
-    return buffer
-  }, this.buffer)
+  this.buffer = []
 }
 
 EntryBuffer.prototype.length = function () {
