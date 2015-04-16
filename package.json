@@ -1,0 +1,40 @@
+{
+  "version": "0.0.0",
+  "name": "winston-tcp",
+  "description": "winston-tcp",
+  "author": "Ahmad Nassri <ahmad@ahmadnassri.com> (https://www.ahmadnassri.com/)",
+  "homepage": "https://github.com/ahmadnassri/winston-tcp",
+  "repository": "ahmadnassri/winston-tcp",
+  "license": "MIT",
+  "main": "./src/index.js",
+  "bin": "./bin/winston-tcp",
+  "keywords": [
+    "winston-tcp"
+  ],
+  "engines": {
+    "node": ">=0.10"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "bugs": {
+    "url": "https://github.com/ahmadnassri/winston-tcp/issues"
+  },
+  "scripts": {
+    "test": "standard && mocha --reporter spec",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha",
+    "codeclimate": "codeclimate < coverage/lcov.info"
+  },
+  "devDependencies": {
+    "codeclimate-test-reporter": "*",
+    "istanbul": "*",
+    "mocha": "*",
+    "should": "*",
+    "standard": "*"
+  },
+  "dependencies": {
+    "commander": "*",
+    "winston": "^1.0.0"
+  }
+}
