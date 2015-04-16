@@ -1,6 +1,6 @@
-# winston-tcp [![version][npm-version]][npm-url] [![License][npm-license]][license-url]
+# Winston TCP Transport [![version][npm-version]][npm-url] [![License][npm-license]][license-url]
 
-description
+Generic TCP Transport for Winston
 
 [![Build Status][travis-image]][travis-url]
 [![Downloads][npm-downloads]][npm-url]
@@ -16,13 +16,48 @@ npm install --save winston-tcp
 
 ## Usage
 
-### winston-tcp()
+```js
+require('winston-tcp')
+
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.TCP)({
+      host: '127.0.0.1',
+      port: 1337,
+      json: true,
+      timestamp: true
+    })
+  ]
+})
+
+logger.log('info', 'foo')
+```
+
+or simply:
 
 ```js
+var winston = require('winston')
 var transport = require('winston-tcp')
-
-winston-tcp()
+ 
+winston.add(new transport({
+  host: '127.0.0.1',
+  port: 1337
+})
+ 
+winston.info('foo')
 ```
+
+## Options
+
+| Name                | Description                                                                   | Default   |
+| ------------------- | ----------------------------------------------------------------------------- | --------- |
+| `host`              | The host to connect to                                                        | none      |
+| `port`              | The server port to connect to                                                 | none      |
+| `reconnectInterval` | Time to pause between disconnect and reconnect (in ms)                        | `1000`    |
+| `bufferLength`      | Number of messages to buffer while disconnected, set to `false` for unlimited | `10000`   |
+| `json`              | If `true`, messages will be logged as JSON                                    | `false`   |
+| `timestamp`         | flag indicating if we should prepend output with timestamps                   | `false`   |
+
 
 ## License
 
