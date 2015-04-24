@@ -58,6 +58,14 @@ winston.info('foo')
 | `json`              | If `true`, messages will be logged as JSON                                    | `false`   |
 | `timestamp`         | flag indicating if we should prepend output with timestamps                   | `false`   |
 
+## Support
+
+Donations are welcome to help support the continuous development of this project.
+
+[![Gratipay][gratipay-image]][gratipay-url]
+[![PayPal][paypal-image]][paypal-url]
+[![Flattr][flattr-image]][flattr-url]
+[![Bitcoin][bitcoin-image]][bitcoin-url]
 
 ## License
 
@@ -79,3 +87,15 @@ winston.info('foo')
 
 [david-url]: https://david-dm.org/ahmadnassri/winston-tcp
 [david-image]: https://img.shields.io/david/ahmadnassri/winston-tcp.svg?style=flat-square
+
+[gratipay-url]: https://www.gratipay.com/ahmadnassri/
+[gratipay-image]: https://img.shields.io/gratipay/ahmadnassri.svg?style=flat-square
+
+[paypal-url]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJ2B2BTK9VLRS&on0=project&os0=winston-tcp
+[paypal-image]: http://img.shields.io/badge/payPal-donate-green.svg?style=flat-square
+
+[flattr-url]: https://flattr.com/submit/auto?user_id=kvz&url=https://github.com/kvz/phpjs&title=phpjs&language=&tags=github&category=software
+[flattr-image]: http://img.shields.io/badge/flattr-donate-green.svg?style=flat-square
+
+[bitcoin-image]: http://img.shields.io/badge/bitcoin-1Nb46sZRVG3or7pNaDjthcGJpWhvoPpCxy-green.svg?style=flat-square
+[bitcoin-url]: https://www.coinbase.com/checkouts/7579a122f0cb2e7e4bbc2de9d780caa5
