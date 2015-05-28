@@ -38,12 +38,12 @@ or simply:
 ```js
 var winston = require('winston')
 var transport = require('winston-tcp')
- 
+
 winston.add(new transport({
   host: '127.0.0.1',
   port: 1337
 })
- 
+
 winston.info('foo')
 ```
 
