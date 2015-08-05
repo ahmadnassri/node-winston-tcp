@@ -32,7 +32,7 @@ describe('node module', function () {
   it('should fail if no host & port are provided', function (done) {
     var transport
 
-    /*eslint-disable no-wrap-func */
+    /*eslint-disable no-extra-parens */
     (function () {
       transport = new Transport()
     }).should.throw(Error)
