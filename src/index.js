@@ -2,7 +2,7 @@
 
 var assert = require('assert')
 var common = require('winston/lib/winston/common')
-var debug = require('debug')('winston:tcp')
+var debug = require('debug-log')('winston:tcp')
 var EntryBuffer = require('./buffer')
 var net = require('net')
 var util = require('util')

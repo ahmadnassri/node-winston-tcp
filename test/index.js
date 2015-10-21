@@ -2,7 +2,7 @@
 
 'use strict'
 
-var debug = require('debug')('winston:tcp:test')
+var debug = require('debug-log')('winston:tcp:test')
 var net = require('net')
 var should = require('should')
 var Transport = require('..')
@@ -13,11 +13,11 @@ var server
 beforeEach(function (done) {
   server = net.createServer(function (socket) {
     socket.on('data', function (data) {
-      debug('[%s]: %s', new Date().toISOString(), data.toString())
+      debug('[data]: %s', data.toString())
     })
 
     socket.on('error', function (err) {
-      debug('[%s] %s:', new Date().toISOString(), err.toString())
+      debug('[error]: %s', err.toString())
     })
   })
 
@@ -32,7 +32,7 @@ describe('node module', function () {
   it('should fail if no host & port are provided', function (done) {
     var transport
 
-    /*eslint-disable no-extra-parens */
+    /*eslint-disable no-wrap-func */
     (function () {
       transport = new Transport()
     }).should.throw(Error)
@@ -104,7 +104,8 @@ describe('node module', function () {
 
     var transport = new Transport({
       host: '0.0.0.0',
-      port: 1337
+      port: 1337,
+      json: true
     })
 
     var logger = new winston.Logger({
@@ -114,13 +115,13 @@ describe('node module', function () {
     // delay a bit to allow socket connection
     setTimeout(function () {
       data.forEach(function (msg) {
-        logger.log('info', msg)
+        logger.log('info', msg, {yolo: 'foo'})
       })
 
       transport.entryBuffer.length().should.equal(0)
 
       done()
-    }, 100)
+    }, 200)
   })
 
   it('should buffer first then drain when connection is established', function (done) {
