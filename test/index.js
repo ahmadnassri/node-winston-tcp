@@ -1,155 +1,149 @@
-/* global describe, it, beforeEach, afterEach */
+import debugLog from 'debug-log'
+import net from 'net'
+import Transport from '..'
+import winston from 'winston'
+import test from 'tape'
 
-'use strict'
+var debug = debugLog('winston:tcp:test')
 
-var debug = require('debug-log')('winston:tcp:test')
-var net = require('net')
-var should = require('should')
-var Transport = require('..')
-var winston = require('winston')
-
-var server
-
-beforeEach(function (done) {
-  server = net.createServer(function (socket) {
-    socket.on('data', function (data) {
-      debug('[data]: %s', data.toString())
-    })
-
-    socket.on('error', function (err) {
-      debug('[error]: %s', err.toString())
-    })
-  })
-
-  server.listen(1337, '127.0.0.1', 10, done)
+var server = net.createServer(socket => {
+  socket.on('data', data => debug('[data]: %s %j', data))
+  socket.on('error', err => debug('[error]: %s %j', err))
 })
 
-afterEach(function () {
-  server.close()
+test('setup', test => server.listen(1337, '127.0.0.1', 10, test.end))
+
+test('no host & port provided', assert => {
+  assert.throws(() => {
+    let transport = new Transport()
+
+    assert.equal(transport, undefined)
+  }, 'should fail')
+
+  assert.end()
 })
 
-describe('node module', function () {
-  it('should fail if no host & port are provided', function (done) {
-    var transport
+test('connection management', assert => {
+  assert.plan(2)
 
-    /*eslint-disable no-wrap-func */
-    (function () {
-      transport = new Transport()
-    }).should.throw(Error)
-
-    should.not.exist(transport)
-
-    done()
+  let transport = new Transport({
+    host: '0.0.0.0',
+    port: 1337,
+    reconnectInterval: 50,
+    reconnectAttempts: 2
   })
 
-  it('should try reconnecting', function (done) {
-    var transport = new Transport({
-      host: '0.0.0.0',
-      port: 1330,
-      reconnectInterval: 50
-    })
+  setTimeout(function () {
+    assert.ok(transport.connected, 'connected')
+  }, transport.options.reconnectInterval)
 
-    setTimeout(function () {
-      // set the correct port
-      transport.port = 1337
-      transport.connectionAttempts.should.equal(4)
-    }, 200)
+  setTimeout(function () {
+    transport.disconnect()
 
-    setTimeout(function () {
-      done()
-    }, 500)
-  })
-
-  it('should close connection', function (done) {
-    var transport = new Transport({
-      host: '0.0.0.0',
-      port: 1337,
-      reconnectInterval: 50
-    })
-
-    setTimeout(function () {
-      transport.connected.should.be.true
-    }, 100)
-
-    setTimeout(function () {
-      transport.disconnect()
-      transport.connected.should.be.false
-      done()
-    }, 200)
-  })
-
-  it('should buffer entries', function (done) {
-    var data = Array.apply(null, {length: 20}).map(Math.random)
-
-    var transport = new Transport({
-      host: '0.0.0.0',
-      port: 1330
-    })
-
-    var logger = new winston.Logger({
-      transports: [transport]
-    })
-
-    data.forEach(function (msg) {
-      logger.log('info', msg)
-    })
-
-    transport.entryBuffer.length().should.equal(20)
-
-    done()
-  })
-
-  it('should write entries', function (done) {
-    var data = Array.apply(null, {length: 20}).map(Math.random)
-
-    var transport = new Transport({
-      host: '0.0.0.0',
-      port: 1337,
-      json: true
-    })
-
-    var logger = new winston.Logger({
-      transports: [transport]
-    })
-
-    // delay a bit to allow socket connection
-    setTimeout(function () {
-      data.forEach(function (msg) {
-        logger.log('info', msg, {yolo: 'foo'})
-      })
-
-      transport.entryBuffer.length().should.equal(0)
-
-      done()
-    }, 200)
-  })
-
-  it('should buffer first then drain when connection is established', function (done) {
-    var data = Array.apply(null, {length: 20}).map(Math.random)
-
-    var transport = new Transport({
-      host: '0.0.0.0',
-      port: 1330,
-      reconnectInterval: 200
-    })
-
-    var logger = new winston.Logger({
-      transports: [transport]
-    })
-
-    data.forEach(function (msg) {
-      logger.log('info', msg)
-    })
-
-    setTimeout(function () {
-      // set the correct port
-      transport.port = 1337
-    }, 100)
-
-    setTimeout(function () {
-      transport.entryBuffer.length().should.equal(0)
-
-      done()
-    }, 400)
-  })
+    assert.notOk(transport.connected, 'disconnected')
+  }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
+
+test('reconnect on failure', assert => {
+  let transport = new Transport({
+    host: '0.0.0.0',
+    port: 1330, // point to wrong port initially
+    reconnectInterval: 50,
+    reconnectAttempts: 5
+  })
+
+  setTimeout(function () {
+    // fix the port (to avoid thrown error)
+    transport.options.port = 1337
+
+    // test
+    assert.equal(transport.connectionAttempts, transport.options.reconnectAttempts - 1, 'attempted to reconnect 4 times')
+  }, transport.options.reconnectInterval * (transport.options.reconnectAttempts - 1))
+
+  // disconnect after the last attempt
+  setTimeout(function () {
+    transport.disconnect(assert.end)
+  }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
+})
+
+test('write entries', assert => {
+  let transport = new Transport({
+    host: '0.0.0.0',
+    port: 1337,
+    json: true
+  })
+
+  let logger = new winston.Logger({
+    transports: [transport]
+  })
+
+  // dummy data
+  let data = Array.apply(null, { length: 20 }).map(Math.random)
+  data.forEach(msg => logger.log('info', msg, { yolo: 'foo' }))
+
+  // delay a bit to allow socket connection
+  setTimeout(function () {
+    assert.equal(transport.entryBuffer.length(), 0, 'buffer drained')
+    transport.disconnect(assert.end)
+  }, 50)
+})
+
+test('buffer entries', assert => {
+  let transport = new Transport({
+    host: '0.0.0.0',
+    // point to wrong port at first
+    port: 1330,
+    reconnectInterval: 100,
+    reconnectAttempts: 2
+  })
+
+  let logger = new winston.Logger({
+    transports: [transport]
+  })
+
+  // dummy data
+  let data = Array.apply(null, { length: 20 }).map(Math.random)
+  data.forEach(msg => logger.log('info', msg))
+
+  // test
+  assert.equal(transport.entryBuffer.length(), 20, '20 entries in buffer')
+
+  // fix the port before continue
+  transport.options.port = 1337
+
+  // delay a bit to allow socket connection
+  setTimeout(function () {
+    assert.equal(transport.entryBuffer.length(), 0, 'buffer drained')
+    transport.disconnect(assert.end)
+  }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
+})
+
+test('buffer => drain', assert => {
+  // setup transport
+  let transport = new Transport({
+    host: '0.0.0.0',
+    port: 1330,  // point to wrong port initially
+    reconnectInterval: 100,
+    reconnectAttempts: 3
+  })
+
+  // setup winston
+  let logger = new winston.Logger({
+    transports: [transport]
+  })
+
+  // dummy data
+  let data = Array.apply(null, { length: 20 }).map(Math.random)
+  data.forEach(msg => logger.log('info', msg))
+
+  // set the correct port
+  transport.options.port = 1337
+
+  setTimeout(function () {
+    assert.equal(transport.entryBuffer.length(), 0, 'buffer drained')
+    transport.disconnect(assert.end)
+  }, transport.options.reconnectInterval * (transport.options.reconnectAttempts - 1))
+})
+
+// teardown
+test('teardown', assert => server.close(assert.end))

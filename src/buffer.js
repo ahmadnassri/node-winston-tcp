@@ -1,30 +1,28 @@
-'use strict'
-
-function EntryBuffer (maxLength) {
-  this.buffer = []
-  this.maxLength = maxLength || false
-}
-
-EntryBuffer.prototype.add = function (entry) {
-  if (this.maxLength === false || this.buffer.length < this.maxLength) {
-    this.buffer.push(entry)
+export default class EntryBuffer {
+  constructor (maxLength = false) {
+    this.buffer = []
+    this.maxLength = maxLength
   }
-}
 
-EntryBuffer.prototype.drain = function (callback) {
-  if (callback) {
-    var i = this.buffer.length
-
-    while (i--) {
-      callback(this.buffer[i])
+  add (entry) {
+    if (this.maxLength === false || this.buffer.length < this.maxLength) {
+      this.buffer.push(entry)
     }
   }
 
-  this.buffer = []
-}
+  drain (callback) {
+    if (typeof callback === 'function') {
+      var i = this.buffer.length
 
-EntryBuffer.prototype.length = function () {
-  return this.buffer.length
-}
+      while (i--) {
+        callback(this.buffer[i])
+      }
+    }
 
-module.exports = EntryBuffer
+    this.buffer = []
+  }
+
+  length () {
+    return this.buffer.length
+  }
+}
