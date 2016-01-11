@@ -1,127 +1,131 @@
 'use strict'
 
-var assert = require('assert')
-var common = require('winston/lib/winston/common')
-var debug = require('debug-log')('winston:tcp')
-var EntryBuffer = require('./buffer')
-var net = require('net')
-var util = require('util')
-var winston = require('winston')
+import assert from 'assert'
+import common from 'winston/lib/winston/common'
+import debugLog from 'debug-log'
+import EntryBuffer from './buffer'
+import net from 'net'
+import winston from 'winston'
 
-var TCP = winston.transports.TCP = function (options) {
-  options = options || {}
-  winston.Transport.call(this, options)
+var debug = debugLog('winston:tcp')
 
-  assert(options.host, 'Must define a host')
-  assert(options.port, 'Must supply a port')
+class TCPTransport extends winston.Transport {
+  constructor (options = { level: 'info', reconnectInterval: 1000, reconnectAttempts: 100, bufferLength: 10000 }) {
+    super(options)
 
-  // generic transport requirements
-  this.name = 'winston-tcp'
-  this.level = options.level || 'info'
+    // store config
+    this.options = options
 
-  // tcp transport specific options
-  this.host = options.host
-  this.port = options.port
+    assert(this.options.host, 'Must define a host')
+    assert(this.options.port, 'Must supply a port')
 
-  this.timestamp = options.timestamp
-  this.json = options.json
-  this.reconnectInterval = options.reconnectInterval || 1000
+    // generic transport requirements
+    this.name = 'winston-tcp'
 
-  // initiate entry buffer
-  this.entryBuffer = new EntryBuffer(options.bufferLength || 10000)
+    // initiate entry buffer
+    this.entryBuffer = new EntryBuffer(this.options.bufferLength)
 
-  // internal flags
-  this.connected = false
-  this.connectionAttempts = 0 // cleared after each connection
-  this.connectionCount = 0
-  this.reconnect = false
+    // internal flags
+    this.connected = false
+    this.connectionAttempts = 0 // cleared after each connection
+    this.connectionCount = 0
+    this.reconnect = false
 
-  this.connect()
-}
+    this.connect()
+  }
 
-util.inherits(TCP, winston.Transport)
+  connect () {
+    if (!this.connected) {
+      if (this.connectionAttempts >= this.options.reconnectAttempts) {
+        throw Error('maximum reconnection attempts')
+      }
 
-TCP.prototype.connect = function () {
-  if (!this.connected) {
-    debug('connection attempt #%s', ++this.connectionAttempts)
+      debug('connection attempt #%s', ++this.connectionAttempts)
 
-    this.reconnect = true
-    this.socket = new net.Socket()
-    this.socket.unref()
+      this.reconnect = true
+      this.socket = new net.Socket()
+      this.socket.unref()
 
-    this.socket.on('error', function (err) {
-      debug('socket error %j', err)
+      this.socket.on('error', err => debug('socket error %j', err))
+
+      this.socket.on('connect', () => {
+        this.connected = true
+        this.connectionAttempts = 0
+
+        debug('connection established #%s', ++this.connectionCount)
+
+        // attempt to resend messages
+
+        var bufferLength = this.entryBuffer.length()
+
+        if (bufferLength) {
+          debug('draining buffer of %s entries', bufferLength)
+
+          this.entryBuffer.drain(this.write.bind(this))
+        }
+      })
+
+      this.socket.on('close', () => {
+        debug('connection closed')
+
+        this.socket.destroy()
+        this.connected = false
+
+        if (this.reconnect) {
+          debug('attempt to reconnect in %s', this.options.reconnectInterval)
+
+          setTimeout(this.connect.bind(this), this.options.reconnectInterval)
+        }
+      })
+
+      this.socket.connect(this.options.port, this.options.host)
+    }
+  }
+
+  disconnect (callback) {
+    this.connected = false
+    this.reconnect = false
+    this.socket.end(callback)
+  }
+
+  write (entry, callback) {
+    if (this.connected) {
+      debug('writing to socket %j', entry)
+
+      this.socket.write(entry, 'utf8', () => {
+        if (typeof callback === 'function') {
+          callback(null, true)
+        }
+      })
+    } else {
+      debug('writing to buffer %j', entry)
+
+      this.entryBuffer.add(entry)
+
+      if (typeof callback === 'function') {
+        callback(null, true)
+      }
+    }
+  }
+
+  log (level, msg, meta, callback) {
+    if (typeof meta === 'function') {
+      callback = meta
+      meta = {}
+    }
+
+    var entry = common.log({
+      level: level,
+      message: msg,
+      meta: meta,
+      timestamp: this.options.timestamp,
+      json: this.options.json
     })
 
-    this.socket.on('connect', function () {
-      this.connected = true
-      this.connectionAttempts = 0
-
-      debug('connection established #%s', ++this.connectionCount)
-
-      // attempt to resend messages
-
-      var bufferLength = this.entryBuffer.length()
-
-      if (bufferLength) {
-        debug('draining buffer of %s entries', bufferLength)
-
-        this.entryBuffer.drain(this.write.bind(this))
-      }
-    }.bind(this))
-
-    this.socket.on('close', function () {
-      debug('connection closed')
-
-      this.socket.destroy()
-      this.connected = false
-
-      if (this.reconnect) {
-        debug('attempt to reconnect in %s', this.reconnectInterval)
-        setTimeout(this.connect.bind(this), this.reconnectInterval)
-      }
-    }.bind(this))
-
-    this.socket.connect(this.port, this.host)
+    this.write(entry, callback)
   }
 }
 
-TCP.prototype.disconnect = function () {
-  this.connected = false
-  this.reconnect = false
-  this.socket.end()
-}
+winston.transports.TCP = TCPTransport
 
-TCP.prototype.write = function (entry, callback) {
-  if (this.connected) {
-    debug('writing to socket %j', entry)
-
-    this.socket.write(entry, 'utf8', function () {
-      if (callback) callback(null, true)
-    })
-  } else {
-    debug('writing to buffer %j', entry)
-
-    this.entryBuffer.add(entry)
-    if (callback) callback(null, true)
-  }
-}
-
-TCP.prototype.log = function (level, msg, meta, callback) {
-  if (typeof meta === 'function') {
-    callback = meta
-    meta = {}
-  }
-
-  var entry = common.log({
-    level: level,
-    message: msg,
-    meta: meta,
-    timestamp: this.timestamp,
-    json: this.json
-  })
-
-  this.write(entry, callback)
-}
-
-module.exports = TCP
+export default TCPTransport

@@ -1,61 +1,50 @@
-/* global describe, it */
+import EntryBuffer from '../src/buffer'
+import test from 'tape'
 
-'use strict'
+test('Entry Buffer', t => {
+  t.test('return current length', assert => {
+    let data = Array.apply(null, { length: 20 }).map(Math.random)
 
-var EntryBuffer = require('../src/buffer')
-
-require('should')
-
-describe('Entry Buffer', function () {
-  it('should return current length', function (done) {
-    var data = Array.apply(null, {length: 20}).map(Math.random)
-
-    var buffer = new EntryBuffer()
+    let buffer = new EntryBuffer()
     data.map(buffer.add, buffer)
 
-    buffer.length().should.equal(20)
-
-    done()
+    assert.equal(buffer.length(), 20, '20 total entries')
+    assert.end()
   })
 
-  it('should not allow more than max entries', function (done) {
-    var data = Array.apply(null, {length: 20}).map(Math.random)
+  t.test('don\'t allow more than max entries', assert => {
+    let data = Array.apply(null, { length: 20 }).map(Math.random)
 
-    var buffer = new EntryBuffer(10)
+    let buffer = new EntryBuffer(10)
     data.map(buffer.add, buffer)
 
-    buffer.length().should.equal(10)
-
-    done()
+    assert.equal(buffer.length(), 10, 'reached max entries')
+    assert.end()
   })
 
-  it('should drain without a callback', function (done) {
-    var data = Array.apply(null, {length: 10}).map(Math.random)
+  t.test('should drain without a callback', assert => {
+    let data = Array.apply(null, { length: 10 }).map(Math.random)
 
-    var buffer = new EntryBuffer()
+    let buffer = new EntryBuffer()
     data.map(buffer.add, buffer)
 
     buffer.drain()
 
-    buffer.length().should.equal(0)
-
-    done()
+    assert.equal(buffer.length(), 0, 'empty drained')
+    assert.end()
   })
 
-  it('should drain with a callback', function (done) {
-    var counter = 0
-    var data = Array.apply(null, {length: 10}).map(Math.random)
+  t.test('drain with a callback', assert => {
+    let counter = 0
+    let data = Array.apply(null, { length: 10 }).map(Math.random)
 
-    var buffer = new EntryBuffer()
+    let buffer = new EntryBuffer()
     data.map(buffer.add, buffer)
 
-    buffer.drain(function (entry) {
-      counter++
-    })
+    buffer.drain(entry => counter++)
 
-    buffer.length().should.equal(0)
-    counter.should.equal(10)
-
-    done()
+    assert.equal(buffer.length(), 0, 'buffer drained')
+    assert.equal(counter, 10, 'counted 10 drain events')
+    assert.end()
   })
 })

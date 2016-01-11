@@ -6,7 +6,7 @@
   "homepage": "https://github.com/ahmadnassri/winston-tcp",
   "repository": "ahmadnassri/winston-tcp",
   "license": "MIT",
-  "main": "./src/index.js",
+  "main": "lib/index.js",
   "keywords": [
     "log",
     "logging",
@@ -20,35 +20,52 @@
   "engines": {
     "node": ">=0.10"
   },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
   "files": [
     "bin",
-    "src"
+    "src",
+    "lib"
   ],
   "bugs": {
     "url": "https://github.com/ahmadnassri/winston-tcp/issues"
   },
   "scripts": {
-    "pretest": "standard && echint",
-    "test": "mocha",
-    "posttest": "npm run coverage",
-    "coverage": "istanbul cover --dir coverage _mocha -- -R dot",
+    "build": "babel src --out-dir lib",
+    "prepublish": "npm run build",
+    "pretest": "standard && echint --verbose && npm run build",
+    "test": "babel-tape-runner test/* | tap-spec",
     "codeclimate": "codeclimate-test-reporter < coverage/lcov.info"
+  },
+  "standard": {
+    "ignore": [
+      "lib/**"
+    ]
   },
   "echint": {
     "ignore": [
+      "lib/**",
       "coverage/**"
     ]
   },
   "devDependencies": {
+    "babel-cli": "^6.4.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-tape-runner": "^2.0.0",
     "codeclimate-test-reporter": "0.1.1",
     "echint": "^1.5.0",
-    "istanbul": "^0.4.0",
-    "mocha": "^2.3.3",
-    "should": "^7.1.1",
-    "standard": "^5.3.1"
+    "istanbul": "^0.4.1",
+    "mocha": "^2.3.4",
+    "should": "^8.1.0",
+    "standard": "^5.4.1",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.4.0"
   },
   "dependencies": {
     "debug-log": "^1.0.0",
-    "winston": "^1.1.1"
+    "winston": "^2.1.1"
   }
 }
