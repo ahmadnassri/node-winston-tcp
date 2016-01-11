@@ -1,6 +1,6 @@
 import debugLog from 'debug-log'
 import net from 'net'
-import Transport from '..'
+import Transport from '../src/index'
 import winston from 'winston'
 import test from 'tape'
 
