@@ -62,7 +62,7 @@
     "echint": "^1.5.0",
     "mocha": "^2.3.4",
     "should": "^8.1.0",
-    "standard": "^5.4.1",
+    "standard": "^6.0.7",
     "tap-dot": "^1.0.1",
     "tap-spec": "^4.1.1",
     "tape": "^4.4.0"
