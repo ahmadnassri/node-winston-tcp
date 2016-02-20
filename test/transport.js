@@ -1,19 +1,19 @@
 import debugLog from 'debug-log'
 import net from 'net'
-import Transport from '../src/index'
+import { test } from 'tap'
+import Transport from '../src/transport'
 import winston from 'winston'
-import test from 'tape'
 
 var debug = debugLog('winston:tcp:test')
 
-var server = net.createServer(socket => {
-  socket.on('data', data => debug('[data]: %s %j', data))
-  socket.on('error', err => debug('[error]: %s %j', err))
+var server = net.createServer((socket) => {
+  socket.on('data', (data) => debug('[data]: %s %j', data))
+  socket.on('error', (err) => debug('[error]: %s %j', err))
 })
 
-test('setup', test => server.listen(1337, '127.0.0.1', 10, test.end))
+test('setup', (test) => server.listen(1337, '127.0.0.1', 10, test.end))
 
-test('no host & port provided', assert => {
+test('no host & port provided', (assert) => {
   assert.throws(() => {
     let transport = new Transport()
 
@@ -23,7 +23,7 @@ test('no host & port provided', assert => {
   assert.end()
 })
 
-test('connection management', assert => {
+test('connection management', (assert) => {
   assert.plan(2)
 
   let transport = new Transport({
@@ -33,18 +33,16 @@ test('connection management', assert => {
     reconnectAttempts: 2
   })
 
-  setTimeout(function () {
-    assert.ok(transport.connected, 'connected')
-  }, transport.options.reconnectInterval)
+  setTimeout(() => assert.ok(transport.connected, 'connected'), transport.options.reconnectInterval)
 
-  setTimeout(function () {
+  setTimeout(() => {
     transport.disconnect()
 
     assert.notOk(transport.connected, 'disconnected')
   }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
-test('reconnect on failure', assert => {
+test('reconnect on failure', (assert) => {
   let transport = new Transport({
     host: '0.0.0.0',
     port: 1330, // point to wrong port initially
@@ -52,7 +50,7 @@ test('reconnect on failure', assert => {
     reconnectAttempts: 5
   })
 
-  setTimeout(function () {
+  setTimeout(() => {
     // fix the port (to avoid thrown error)
     transport.options.port = 1337
 
@@ -61,12 +59,10 @@ test('reconnect on failure', assert => {
   }, transport.options.reconnectInterval * (transport.options.reconnectAttempts - 1))
 
   // disconnect after the last attempt
-  setTimeout(function () {
-    transport.disconnect(assert.end)
-  }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
+  setTimeout(() => transport.disconnect(assert.end), transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
-test('write entries', assert => {
+test('write entries', (assert) => {
   let transport = new Transport({
     host: '0.0.0.0',
     port: 1337,
@@ -79,16 +75,16 @@ test('write entries', assert => {
 
   // dummy data
   let data = Array.apply(null, { length: 20 }).map(Math.random)
-  data.forEach(msg => logger.log('info', msg, { yolo: 'foo' }))
+  data.forEach((msg) => logger.log('info', msg, { yolo: 'foo' }))
 
   // delay a bit to allow socket connection
-  setTimeout(function () {
+  setTimeout(() => {
     assert.equal(transport.entryBuffer.length(), 0, 'buffer drained')
     transport.disconnect(assert.end)
   }, 50)
 })
 
-test('buffer entries', assert => {
+test('buffer entries', (assert) => {
   let transport = new Transport({
     host: '0.0.0.0',
     // point to wrong port at first
@@ -103,7 +99,7 @@ test('buffer entries', assert => {
 
   // dummy data
   let data = Array.apply(null, { length: 20 }).map(Math.random)
-  data.forEach(msg => logger.log('info', msg))
+  data.forEach((msg) => logger.log('info', msg))
 
   // test
   assert.equal(transport.entryBuffer.length(), 20, '20 entries in buffer')
@@ -112,13 +108,13 @@ test('buffer entries', assert => {
   transport.options.port = 1337
 
   // delay a bit to allow socket connection
-  setTimeout(function () {
+  setTimeout(() => {
     assert.equal(transport.entryBuffer.length(), 0, 'buffer drained')
     transport.disconnect(assert.end)
   }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
-test('buffer => drain', assert => {
+test('buffer => drain', (assert) => {
   // setup transport
   let transport = new Transport({
     host: '0.0.0.0',
@@ -134,16 +130,16 @@ test('buffer => drain', assert => {
 
   // dummy data
   let data = Array.apply(null, { length: 20 }).map(Math.random)
-  data.forEach(msg => logger.log('info', msg))
+  data.forEach((msg) => logger.log('info', msg))
 
   // set the correct port
   transport.options.port = 1337
 
-  setTimeout(function () {
+  setTimeout(() => {
     assert.equal(transport.entryBuffer.length(), 0, 'buffer drained')
     transport.disconnect(assert.end)
   }, transport.options.reconnectInterval * (transport.options.reconnectAttempts - 1))
 })
 
 // teardown
-test('teardown', assert => server.close(assert.end))
+test('teardown', (assert) => server.close(assert.end))

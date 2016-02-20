@@ -17,11 +17,11 @@ npm install --save winston-tcp
 ## Usage
 
 ```js
-require('winston-tcp')
+import Transport from 'winston-tcp'
 
-var logger = new (winston.Logger)({
+let logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.TCP)({
+    new (Transport)({
       host: '127.0.0.1',
       port: 1337,
       json: true,
@@ -36,10 +36,10 @@ logger.log('info', 'foo')
 or simply:
 
 ```js
-var winston = require('winston')
-var transport = require('winston-tcp')
+import winston from 'winston'
+import Transport from 'winston-tcp'
 
-winston.add(new transport({
+winston.add(new Transport({
   host: '127.0.0.1',
   port: 1337
 })
