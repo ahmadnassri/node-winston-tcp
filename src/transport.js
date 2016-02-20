@@ -1,5 +1,3 @@
-'use strict'
-
 import assert from 'assert'
 import common from 'winston/lib/winston/common'
 import debugLog from 'debug-log'
@@ -7,9 +5,9 @@ import EntryBuffer from './buffer'
 import net from 'net'
 import winston from 'winston'
 
-var debug = debugLog('winston:tcp')
+const debug = debugLog('winston:tcp')
 
-class TCPTransport extends winston.Transport {
+export default class Transport extends winston.Transport {
   constructor (options = { level: 'info', reconnectInterval: 1000, reconnectAttempts: 100, bufferLength: 10000 }) {
     super(options)
 
@@ -46,7 +44,7 @@ class TCPTransport extends winston.Transport {
       this.socket = new net.Socket()
       this.socket.unref()
 
-      this.socket.on('error', err => debug('socket error %j', err))
+      this.socket.on('error', (err) => debug('socket error %j', err))
 
       this.socket.on('connect', () => {
         this.connected = true
@@ -56,7 +54,7 @@ class TCPTransport extends winston.Transport {
 
         // attempt to resend messages
 
-        var bufferLength = this.entryBuffer.length()
+        let bufferLength = this.entryBuffer.length()
 
         if (bufferLength) {
           debug('draining buffer of %s entries', bufferLength)
@@ -114,7 +112,7 @@ class TCPTransport extends winston.Transport {
       meta = {}
     }
 
-    var entry = common.log({
+    let entry = common.log({
       level: level,
       message: msg,
       meta: meta,
@@ -125,7 +123,3 @@ class TCPTransport extends winston.Transport {
     this.write(entry, callback)
   }
 }
-
-winston.transports.TCP = TCPTransport
-
-export default TCPTransport
