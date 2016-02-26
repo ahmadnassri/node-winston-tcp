@@ -69,7 +69,11 @@ Donations are welcome to help support the continuous development of this project
 
 ## License
 
-[ISC License](LICENSE) &copy; [Ahmad Nassri](https://www.ahmadnassri.com/)
+----
+> :copyright: [www.ahmadnassri.com](https://www.ahmadnassri.com/) &nbsp;&middot;&nbsp;
+> License: [ISC](LICENSE) &nbsp;&middot;&nbsp;
+> Github: [@ahmadnassri](https://github.com/ahmadnassri) &nbsp;&middot;&nbsp;
+> Twitter: [@ahmadnassri](https://twitter.com/ahmadnassri)
 
 [license-url]: https://github.com/ahmadnassri/winston-tcp/blob/master/LICENSE
 
