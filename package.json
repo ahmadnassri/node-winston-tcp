@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/ahmadnassri/winston-tcp.git"
   },
-  "license": "MIT",
+  "license": "ISC",
   "main": "lib/transport.js",
   "keywords": [
     "log",
@@ -35,8 +35,8 @@
     "pretest": "standard && echint",
     "coverage": "tap test/*.js --coverage --nyc-arg=--require --nyc-arg=babel-register --nyc-arg=--require --nyc-arg=babel-polyfill",
     "codeclimate": "nyc report --reporter=text-lcov | codeclimate-test-reporter",
-    "release": "semantic-release pre && npm publish && semantic-release post",
-    "prepublish": "npm run compile"
+    "prepublish": "npm run compile",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "babel": {
     "presets": [
@@ -64,6 +64,7 @@
     "codeclimate-test-reporter": "0.3.1",
     "cz-conventional-changelog": "^1.1.5",
     "echint": "^1.5.3",
+    "nyc": "*",
     "semantic-release": "^4.3.5",
     "standard": "^6.0.7",
     "tap": "^5.6.0",
