@@ -1,4 +1,4 @@
 *.log
-.nyc_output
-lib
-node_modules
+/lib
+/node_modules
+/.nyc_output
