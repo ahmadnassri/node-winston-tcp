@@ -67,7 +67,7 @@
     "nyc": "*",
     "semantic-release": "^4.3.5",
     "standard": "^6.0.8",
-    "tap": "^5.7.1",
+    "tap": "^5.7.3",
     "tap-mocha-reporter": "0.0.24"
   },
   "dependencies": {
