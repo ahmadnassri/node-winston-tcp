@@ -44,7 +44,7 @@ export default class Transport extends winston.Transport {
       this.socket = new net.Socket()
       this.socket.unref()
 
-      this.socket.on('error', (err) => debug('socket error %j', err))
+      this.socket.on('error', err => debug('socket error %j', err))
 
       this.socket.on('connect', () => {
         this.connected = true
