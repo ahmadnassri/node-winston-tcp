@@ -92,7 +92,7 @@ winston.info('foo')
 
 ----
 > :copyright: [www.ahmadnassri.com](https://www.ahmadnassri.com/) &nbsp;&middot;&nbsp;
-> License: [ISC](LICENSE) &nbsp;&middot;&nbsp;
+> License: [ISC][license-url] &nbsp;&middot;&nbsp;
 > Github: [@ahmadnassri](https://github.com/ahmadnassri) &nbsp;&middot;&nbsp;
 > Twitter: [@ahmadnassri](https://twitter.com/ahmadnassri)
 
