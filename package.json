@@ -37,11 +37,6 @@
     "codeclimate": "nyc report --reporter=text-lcov | codeclimate-test-reporter",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
-  },
   "standard": {
     "ignore": [
       "lib/**"
