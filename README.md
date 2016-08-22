@@ -49,6 +49,7 @@ var winston-tcp = require('winston-tcp')
 
 ## API
 
+```js
 import Transport from 'winston-tcp'
 
 let logger = new (winston.Logger)({
