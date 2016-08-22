@@ -1,7 +1,7 @@
 import EntryBuffer from '../src/buffer'
 import { test } from 'tap'
 
-test('return current length', (assert) => {
+test('return current length', assert => {
   let data = Array.apply(null, { length: 20 }).map(Math.random)
 
   let buffer = new EntryBuffer()
@@ -11,7 +11,7 @@ test('return current length', (assert) => {
   assert.end()
 })
 
-test('don\'t allow more than max entries', (assert) => {
+test('don\'t allow more than max entries', assert => {
   let data = Array.apply(null, { length: 20 }).map(Math.random)
 
   let buffer = new EntryBuffer(10)
@@ -21,7 +21,7 @@ test('don\'t allow more than max entries', (assert) => {
   assert.end()
 })
 
-test('should drain without a callback', (assert) => {
+test('should drain without a callback', assert => {
   let data = Array.apply(null, { length: 10 }).map(Math.random)
 
   let buffer = new EntryBuffer()
@@ -33,7 +33,7 @@ test('should drain without a callback', (assert) => {
   assert.end()
 })
 
-test('drain with a callback', (assert) => {
+test('drain with a callback', assert => {
   let counter = 0
   let data = Array.apply(null, { length: 10 }).map(Math.random)
 

@@ -6,14 +6,14 @@ import winston from 'winston'
 
 var debug = debugLog('winston:tcp:test')
 
-var server = net.createServer((socket) => {
+var server = net.createServer(socket => {
   socket.on('data', (data) => debug('[data]: %s %j', data))
   socket.on('error', (err) => debug('[error]: %s %j', err))
 })
 
-test('setup', (test) => server.listen(1337, '127.0.0.1', 10, test.end))
+test('setup', test => server.listen(1337, '127.0.0.1', 10, test.end))
 
-test('no host & port provided', (assert) => {
+test('no host & port provided', assert => {
   assert.throws(() => {
     let transport = new Transport()
 
@@ -23,7 +23,7 @@ test('no host & port provided', (assert) => {
   assert.end()
 })
 
-test('connection management', (assert) => {
+test('connection management', assert => {
   assert.plan(2)
 
   let transport = new Transport({
@@ -42,7 +42,7 @@ test('connection management', (assert) => {
   }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
-test('reconnect on failure', (assert) => {
+test('reconnect on failure', assert => {
   let transport = new Transport({
     host: '0.0.0.0',
     port: 1330, // point to wrong port initially
@@ -62,7 +62,7 @@ test('reconnect on failure', (assert) => {
   setTimeout(() => transport.disconnect(assert.end), transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
-test('write entries', (assert) => {
+test('write entries', assert => {
   let transport = new Transport({
     host: '0.0.0.0',
     port: 1337,
@@ -84,7 +84,7 @@ test('write entries', (assert) => {
   }, 50)
 })
 
-test('buffer entries', (assert) => {
+test('buffer entries', assert => {
   let transport = new Transport({
     host: '0.0.0.0',
     // point to wrong port at first
@@ -114,7 +114,7 @@ test('buffer entries', (assert) => {
   }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
-test('buffer => drain', (assert) => {
+test('buffer => drain', assert => {
   // setup transport
   let transport = new Transport({
     host: '0.0.0.0',
@@ -142,4 +142,4 @@ test('buffer => drain', (assert) => {
 })
 
 // teardown
-test('teardown', (assert) => server.close(assert.end))
+test('teardown', assert => server.close(assert.end))

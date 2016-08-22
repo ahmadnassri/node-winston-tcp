@@ -12,7 +12,7 @@ export default class EntryBuffer {
 
   drain (callback) {
     if (typeof callback === 'function') {
-      var i = this.buffer.length
+      let i = this.buffer.length
 
       while (i--) {
         callback(this.buffer[i])
