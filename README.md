@@ -1,6 +1,6 @@
 # Winston TCP [![version][npm-version]][npm-url] [![License][npm-license]][license-url]
 
-TCP transport for [Winston](https://github.com/winstonjs/winston)
+> TCP transport for [Winston](https://github.com/winstonjs/winston)
 
 [![Build Status][travis-image]][travis-url]
 [![Downloads][npm-downloads]][npm-url]
@@ -42,7 +42,7 @@ const winston-tcp = require('winston-tcp/lib/node4')
  * Built using `babel-preset-es2015`
  * Note: 
  *   - additional package is required: `babel-runtime`
- *   - npm install --save babel-runtime
+ *   - npm install --production --save babel-runtime
  */
 var winston-tcp = require('winston-tcp')
 ```
@@ -74,7 +74,7 @@ import Transport from 'winston-tcp'
 winston.add(new Transport({
   host: '127.0.0.1',
   port: 1337
-})
+}))
 
 winston.info('foo')
 ```
