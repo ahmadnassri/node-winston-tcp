@@ -1,12 +1,12 @@
-import debugLog from 'debug-log'
 import net from 'net'
-import { test } from 'tap'
 import Transport from '../src/transport'
 import winston from 'winston'
+import { debuglog } from 'util'
+import { test } from 'tap'
 
-var debug = debugLog('winston:tcp:test')
+const debug = debuglog('winston:tcp:test')
 
-var server = net.createServer(socket => {
+const server = net.createServer(socket => {
   socket.on('data', (data) => debug('[data]: %s %j', data))
   socket.on('error', (err) => debug('[error]: %s %j', err))
 })
