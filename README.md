@@ -6,6 +6,7 @@
 [![Downloads][npm-downloads]][npm-url]
 [![Code Climate][codeclimate-quality]][codeclimate-url]
 [![Coverage Status][codeclimate-coverage]][codeclimate-url]
+[![Dependency Status][dependencyci-image]][dependencyci-url]
 [![Dependencies][david-image]][david-url]
 
 ## Install
@@ -16,35 +17,29 @@ npm install --production --save winston-tcp
 
 ## Usage
 
-I reccomend using an optimized build matching your Node.js environment version, otherwise, the standard `require` would work just fine.
+I recommend using an optimized build matching your Node.js environment version, otherwise, the standard `require` would work just fine with any version of Node `>= v4.0` .
 
 ```js
 /*
- * Node 6
- * Built using `babel-preset-es2015-node6`
+ * Node 7
  */
-const winston-tcp = require('winston-tcp/lib/node6')
+const Transport = require('winston-tcp/lib/node7')
+
+/*
+ * Node 6
+ */
+const Transport = require('winston-tcp/lib/node6')
 
 /*
  * Node 5
- * Built using `babel-preset-es2015-node5`
  */
-const winston-tcp = require('winston-tcp/lib/node5')
+var Transport = require('winston-tcp/lib/node5')
 
 /*
- * Node 4
- * Built using `babel-preset-es2015-node4`
+ * Node 4 (Default)
+ * Note: additional ES2015 polyfills may be required
  */
-const winston-tcp = require('winston-tcp/lib/node4')
-
-/*
- * Node >=0.10 <=0.12
- * Built using `babel-preset-es2015`
- * Note: 
- *   - additional package is required: `babel-runtime`
- *   - npm install --production --save babel-runtime
- */
-var winston-tcp = require('winston-tcp')
+var Transport = require('winston-tcp')
 ```
 
 ## API
@@ -113,3 +108,6 @@ winston.info('foo')
 
 [david-url]: https://david-dm.org/ahmadnassri/winston-tcp
 [david-image]: https://img.shields.io/david/ahmadnassri/winston-tcp.svg?style=flat-square
+
+[dependencyci-url]: https://dependencyci.com/github/ahmadnassri/winston-tcp
+[dependencyci-image]: https://dependencyci.com/github/ahmadnassri/winston-tcp/badge?style=flat-square

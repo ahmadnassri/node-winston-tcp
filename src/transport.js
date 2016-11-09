@@ -1,11 +1,11 @@
 import assert from 'assert'
 import common from 'winston/lib/winston/common'
-import debugLog from 'debug-log'
 import EntryBuffer from './buffer'
 import net from 'net'
 import winston from 'winston'
+import { debuglog } from 'util'
 
-const debug = debugLog('winston:tcp')
+const debug = debuglog('winston:tcp')
 
 export default class Transport extends winston.Transport {
   constructor (options = { level: 'info', reconnectInterval: 1000, reconnectAttempts: 100, bufferLength: 10000 }) {
