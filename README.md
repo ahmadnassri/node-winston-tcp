@@ -31,11 +31,6 @@ const Transport = require('winston-tcp/lib/node7')
 const Transport = require('winston-tcp/lib/node6')
 
 /*
- * Node 5
- */
-var Transport = require('winston-tcp/lib/node5')
-
-/*
  * Node 4 (Default)
  * Note: additional ES2015 polyfills may be required
  */
@@ -87,7 +82,7 @@ winston.info('foo')
 | `timestamp`         | flag indicating if we should prepend output with timestamps                   | `false`   |
 
 ----
-> :copyright: [www.ahmadnassri.com](https://www.ahmadnassri.com/) &nbsp;&middot;&nbsp;
+> :copyright: [ahmadnassri.com](https://www.ahmadnassri.com/) &nbsp;&middot;&nbsp;
 > License: [ISC][license-url] &nbsp;&middot;&nbsp;
 > Github: [@ahmadnassri](https://github.com/ahmadnassri) &nbsp;&middot;&nbsp;
 > Twitter: [@ahmadnassri](https://twitter.com/ahmadnassri)
