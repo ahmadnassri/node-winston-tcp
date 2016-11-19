@@ -12,7 +12,7 @@
 ## Install
 
 ```bash
-npm install --production --save winston-tcp
+npm install --only=production --save winston-tcp
 ```
 
 ## Usage
