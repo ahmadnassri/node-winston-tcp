@@ -15,28 +15,6 @@
 npm install --only=production --save winston-tcp
 ```
 
-## Usage
-
-I recommend using an optimized build matching your Node.js environment version, otherwise, the standard `require` would work just fine with any version of Node `>= v4.0` .
-
-```js
-/*
- * Node 7
- */
-const Transport = require('winston-tcp/lib/node7')
-
-/*
- * Node 6
- */
-const Transport = require('winston-tcp/lib/node6')
-
-/*
- * Node 4 (Default)
- * Note: additional ES2015 polyfills may be required
- */
-var Transport = require('winston-tcp')
-```
-
 ## API
 
 ```js
@@ -80,6 +58,22 @@ winston.info('foo')
 | `bufferLength`      | Number of messages to buffer while disconnected, set to `false` for unlimited | `10000`   |
 | `json`              | If `true`, messages will be logged as JSON                                    | `false`   |
 | `timestamp`         | flag indicating if we should prepend output with timestamps                   | `false`   |
+
+
+## Targeted Builds
+
+an optimized build is made available for every major Node.js version marked as [Active LTS](https://github.com/nodejs/LTS).
+
+```js
+// Node 7
+const winston-tcp = require('winston-tcp/lib/node7')
+
+// Node 6
+const winston-tcp = require('winston-tcp/lib/node6')
+
+// Node 4 (Default)
+var winston-tcp = require('winston-tcp')
+```
 
 ----
 > :copyright: [ahmadnassri.com](https://www.ahmadnassri.com/) &nbsp;&middot;&nbsp;

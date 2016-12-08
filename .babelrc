@@ -1,28 +1,23 @@
 {
   "env": {
-    "test": {
+    "development": {
       "presets": [ ["env", { "targets": { "node": "current" } }] ],
       "plugins": []
     },
 
-    "browsers": {
-      "presets": [ ["env", { "targets": { "browsers": ["last 2 versions"] } }] ],
-      "plugins": ["babel-plugin-add-module-exports"]
-    },
-
     "v4": {
       "presets": [ ["env", { "targets": { "node": 4.0 } }] ],
-      "plugins": ["babel-plugin-add-module-exports"]
+      "plugins": ["add-module-exports"]
     },
 
     "v6": {
       "presets": [ ["env", { "targets": { "node": 6.0 } }] ],
-      "plugins": ["babel-plugin-add-module-exports"]
+      "plugins": ["add-module-exports"]
     },
 
     "v7": {
       "presets": [ ["env", { "targets": { "node": 7.0 } }] ],
-      "plugins": ["babel-plugin-add-module-exports"]
+      "plugins": ["add-module-exports"]
     }
   }
 }

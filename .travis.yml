@@ -1,12 +1,12 @@
 language: node_js
 
 node_js:
- - 4
- - 6
  - 7
+ - 6
+ - 4
 
 env:
-  - BABEL_ENV=test
+  - BABEL_ENV=development
 
 matrix:
   fast_finish: true
@@ -18,14 +18,24 @@ cache:
 before_script:
   - npm prune
 
-after_success:
-  - npm run coverage
-  - npm run codeclimate
-  - BABEL_ENV=v4 npm run compile -- -d lib
+before_deploy:
+  - npm install semantic-release
+  - npm install codeclimate-test-reporter
+
+  - npm run coverage -- --coverage-report=text-lcov | codeclimate-test-reporter
+
+  - BABEL_ENV=v4 npm run compile -- -d lib/node4
   - BABEL_ENV=v6 npm run compile -- -d lib/node6
   - BABEL_ENV=v7 npm run compile -- -d lib/node7
-  - BABEL_ENV=browsers npm run compile -- -d lib/browsers
-  - npm run semantic-release
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: semantic-release pre && npm publish && semantic-release post
+
+  on:
+    branch: master
+    node: 7
 
 branches:
   except:
