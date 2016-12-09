@@ -31,7 +31,7 @@ before_deploy:
 deploy:
   skip_cleanup: true
   provider: script
-  script: semantic-release pre && npm publish && semantic-release post
+  script: semantic-release pre && npm publish && semantic-release post || true
 
   on:
     branch: master
