@@ -1,5 +1,5 @@
 import net from 'net'
-import Transport from '../src/transport'
+import Transport from '../src/index'
 import winston from 'winston'
 import { debuglog } from 'util'
 import { test } from 'tap'
