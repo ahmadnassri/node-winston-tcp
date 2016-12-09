@@ -1,5 +1,5 @@
 {
-  "version": "1.1.5",
+  "version": "0.0.0-development",
   "name": "winston-tcp",
   "description": "TCP transport for Winston",
   "author": "Ahmad Nassri <ahmad@ahmadnassri.com> (https://www.ahmadnassri.com/)",
