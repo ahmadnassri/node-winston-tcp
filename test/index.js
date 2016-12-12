@@ -7,14 +7,14 @@ import { test } from 'tap'
 const debug = debuglog('winston:tcp:test')
 
 const server = net.createServer(socket => {
-  socket.on('data', (data) => debug('[data]: %s %j', data))
-  socket.on('error', (err) => debug('[error]: %s %j', err))
+  socket.on('data', data => debug('[data]: %s %j', data))
+  socket.on('error', err => debug('[error]: %s %j', err))
 })
 
 test('setup', test => server.listen(1337, '127.0.0.1', 10, test.end))
 
 test('no host & port provided', assert => {
-  assert.throws(() => {
+  assert.throws(_ => {
     let transport = new Transport()
 
     assert.equal(transport, undefined)
@@ -33,9 +33,9 @@ test('connection management', assert => {
     reconnectAttempts: 2
   })
 
-  setTimeout(() => assert.ok(transport.connected, 'connected'), transport.options.reconnectInterval)
+  setTimeout(_ => assert.ok(transport.connected, 'connected'), transport.options.reconnectInterval)
 
-  setTimeout(() => {
+  setTimeout(_ => {
     transport.disconnect()
 
     assert.notOk(transport.connected, 'disconnected')
@@ -50,7 +50,7 @@ test('reconnect on failure', assert => {
     reconnectAttempts: 5
   })
 
-  setTimeout(() => {
+  setTimeout(_ => {
     // fix the port (to avoid thrown error)
     transport.options.port = 1337
 
@@ -59,7 +59,7 @@ test('reconnect on failure', assert => {
   }, transport.options.reconnectInterval * (transport.options.reconnectAttempts - 1))
 
   // disconnect after the last attempt
-  setTimeout(() => transport.disconnect(assert.end), transport.options.reconnectInterval * transport.options.reconnectAttempts)
+  setTimeout(_ => transport.disconnect(assert.end), transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
 test('write entries', assert => {
@@ -75,10 +75,10 @@ test('write entries', assert => {
 
   // dummy data
   let data = Array.apply(null, { length: 20 }).map(Math.random)
-  data.forEach((msg) => logger.log('info', msg, { yolo: 'foo' }))
+  data.forEach(msg => logger.log('info', msg, { yolo: 'foo' }))
 
   // delay a bit to allow socket connection
-  setTimeout(() => {
+  setTimeout(_ => {
     assert.equal(transport.entryBuffer.length(), 0, 'buffer drained')
     transport.disconnect(assert.end)
   }, 50)
@@ -99,7 +99,7 @@ test('buffer entries', assert => {
 
   // dummy data
   let data = Array.apply(null, { length: 20 }).map(Math.random)
-  data.forEach((msg) => logger.log('info', msg))
+  data.forEach(msg => logger.log('info', msg))
 
   // test
   assert.equal(transport.entryBuffer.length(), 20, '20 entries in buffer')
@@ -108,7 +108,7 @@ test('buffer entries', assert => {
   transport.options.port = 1337
 
   // delay a bit to allow socket connection
-  setTimeout(() => {
+  setTimeout(_ => {
     assert.equal(transport.entryBuffer.length(), 0, 'buffer drained')
     transport.disconnect(assert.end)
   }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
@@ -130,12 +130,12 @@ test('buffer => drain', assert => {
 
   // dummy data
   let data = Array.apply(null, { length: 20 }).map(Math.random)
-  data.forEach((msg) => logger.log('info', msg))
+  data.forEach(msg => logger.log('info', msg))
 
   // set the correct port
   transport.options.port = 1337
 
-  setTimeout(() => {
+  setTimeout(_ => {
     assert.equal(transport.entryBuffer.length(), 0, 'buffer drained')
     transport.disconnect(assert.end)
   }, transport.options.reconnectInterval * (transport.options.reconnectAttempts - 1))
