@@ -1,4 +1,4 @@
-# Winston TCP [![version][npm-version]][npm-url] [![License][npm-license]][license-url]
+# Winston TCP [![version][npm-version]][npm-url] [![License][license-image]][license-url]
 
 > TCP transport for [Winston](https://github.com/winstonjs/winston)
 
@@ -50,15 +50,14 @@ winston.info('foo')
 
 ## Options
 
-| Name                | Description                                                                   | Default   |
-| ------------------- | ----------------------------------------------------------------------------- | --------- |
-| `host`              | The host to connect to                                                        | none      |
-| `port`              | The server port to connect to                                                 | none      |
-| `reconnectInterval` | Time to pause between disconnect and reconnect (in ms)                        | `1000`    |
-| `bufferLength`      | Number of messages to buffer while disconnected, set to `false` for unlimited | `10000`   |
-| `json`              | If `true`, messages will be logged as JSON                                    | `false`   |
-| `timestamp`         | flag indicating if we should prepend output with timestamps                   | `false`   |
-
+Name                | Description                                                                   | Default
+------------------- | ----------------------------------------------------------------------------- | -------
+`host`              | The host to connect to                                                        | none
+`port`              | The server port to connect to                                                 | none
+`reconnectInterval` | Time to pause between disconnect and reconnect (in ms)                        | `1000`
+`bufferLength`      | Number of messages to buffer while disconnected, set to `false` for unlimited | `10000`
+`json`              | If `true`, messages will be logged as JSON                                    | `false`
+`timestamp`         | flag indicating if we should prepend output with timestamps                   | `false`
 
 ## Targeted Builds
 
@@ -66,28 +65,29 @@ an optimized build is made available for every major Node.js version marked as [
 
 ```js
 // Node 7
-const winston-tcp = require('winston-tcp/lib/node7')
+const winston-tcp = require('winston-tcp/build/node7')
 
 // Node 6
-const winston-tcp = require('winston-tcp/lib/node6')
+const winston-tcp = require('winston-tcp/build/node6')
 
 // Node 4 (Default)
 var winston-tcp = require('winston-tcp')
 ```
 
-----
-> :copyright: [ahmadnassri.com](https://www.ahmadnassri.com/) &nbsp;&middot;&nbsp;
-> License: [ISC][license-url] &nbsp;&middot;&nbsp;
-> Github: [@ahmadnassri](https://github.com/ahmadnassri) &nbsp;&middot;&nbsp;
+---
+
+> :copyright: [ahmadnassri.com](https://www.ahmadnassri.com/)  · 
+> License: [ISC][license-url]  · 
+> Github: [@ahmadnassri](https://github.com/ahmadnassri)  · 
 > Twitter: [@ahmadnassri](https://twitter.com/ahmadnassri)
 
 [license-url]: http://choosealicense.com/licenses/isc/
+[license-image]: https://img.shields.io/github/license/ahmadnassri/winston-tcp.svg?style=flat-square
 
 [travis-url]: https://travis-ci.org/ahmadnassri/winston-tcp
 [travis-image]: https://img.shields.io/travis/ahmadnassri/winston-tcp.svg?style=flat-square
 
 [npm-url]: https://www.npmjs.com/package/winston-tcp
-[npm-license]: https://img.shields.io/npm/l/winston-tcp.svg?style=flat-square
 [npm-version]: https://img.shields.io/npm/v/winston-tcp.svg?style=flat-square
 [npm-downloads]: https://img.shields.io/npm/dm/winston-tcp.svg?style=flat-square
 
