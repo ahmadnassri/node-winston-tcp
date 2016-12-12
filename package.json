@@ -9,7 +9,7 @@
     "url": "https://github.com/ahmadnassri/winston-tcp.git"
   },
   "license": "ISC",
-  "main": "lib/node4/transport.js",
+  "main": "build/node4/index.js",
   "keywords": [
     "log",
     "logging",
@@ -24,32 +24,32 @@
     "node": ">=4"
   },
   "files": [
-    "lib",
+    "build",
     "src"
   ],
   "bugs": {
     "url": "https://github.com/ahmadnassri/winston-tcp/issues"
   },
   "scripts": {
-    "compile": "babel -q src",
-    "pretest": "snazzy && echint",
+    "build": "babel-build-all",
+    "lint": "snazzy && echint",
+    "pretest": "npm run lint && npm run build",
     "test": "tap test --reporter spec --node-arg=--require --node-arg=babel-register",
     "coverage": "tap test --reporter silent --coverage --nyc-arg=--require --nyc-arg=babel-register"
   },
   "standard": {
     "ignore": [
-      "lib/**"
+      "build/**"
     ]
   },
   "echint": {
     "ignore": [
-      "lib/**"
+      "build/**"
     ]
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
+    "@ahmadnassri/babel-build-all": "^1.1.0",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-env": "1.0.1",
     "babel-register": "^6.18.0",
     "echint": "^2.1.0",
     "snazzy": "^5.0.0",
