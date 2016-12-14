@@ -1,5 +1,6 @@
 {
   "presets": [ ["env", { "targets": { "node": "current" } }] ],
+
   "env": {
     "node4": {
       "presets": [ ["env", { "targets": { "node": 4.0 } }] ],

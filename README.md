@@ -75,7 +75,6 @@ var winston-tcp = require('winston-tcp')
 ```
 
 ---
-
 > :copyright: [ahmadnassri.com](https://www.ahmadnassri.com/)  · 
 > License: [ISC][license-url]  · 
 > Github: [@ahmadnassri](https://github.com/ahmadnassri)  · 
