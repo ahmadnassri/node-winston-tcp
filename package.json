@@ -53,7 +53,7 @@
     "babel-preset-env": "^1.0.2",
     "babel-register": "^6.18.0",
     "echint": "^2.1.0",
-    "snazzy": "^5.0.0",
+    "snazzy": "^6.0.0",
     "tap": "^9.0.0"
   },
   "dependencies": {
