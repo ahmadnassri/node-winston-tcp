@@ -110,7 +110,6 @@ tap.test('accepts a custom formatter', assert => {
   }, 50)
 })
 
->>>>>>> danielsiwiec-master
 tap.test('buffer entries', assert => {
   let transport = new Transport({
     host: '0.0.0.0',
