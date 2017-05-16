@@ -58,6 +58,7 @@ Name                | Description                                               
 `bufferLength`      | Number of messages to buffer while disconnected, set to `false` for unlimited | `10000`
 `json`              | If `true`, messages will be logged as JSON                                    | `false`
 `timestamp`         | flag indicating if we should prepend output with timestamps                   | `false`
+`formatter`         | a custom formatter (see Winston docs)                                         | none
 
 ---
 > :copyright: [ahmadnassri.com](https://www.ahmadnassri.com/)  · 
