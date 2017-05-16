@@ -9,7 +9,7 @@
     "url": "https://github.com/ahmadnassri/winston-tcp.git"
   },
   "license": "ISC",
-  "main": "build/node4/index.js",
+  "main": "lib/index.js",
   "keywords": [
     "log",
     "logging",
@@ -24,39 +24,23 @@
     "node": ">=4"
   },
   "files": [
-    "build",
-    "src"
+    "lib"
   ],
   "bugs": {
     "url": "https://github.com/ahmadnassri/winston-tcp/issues"
   },
   "scripts": {
-    "build": "babel-build-all",
-    "lint": "snazzy && echint",
-    "pretest": "npm run lint && npm run build",
-    "test": "tap test --node-arg=--require --node-arg=babel-register",
-    "coverage": "tap test --reporter silent --coverage --nyc-arg=--require --nyc-arg=babel-register"
-  },
-  "standard": {
-    "ignore": [
-      "build/**"
-    ]
-  },
-  "echint": {
-    "ignore": [
-      "build/**"
-    ]
+    "lint": "standard && echint",
+    "pretest": "npm run lint",
+    "test": "tap test",
+    "coverage": "tap test --reporter silent --coverage"
   },
   "devDependencies": {
-    "@ahmadnassri/babel-build-all": "^1.3.0",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-env": "^1.0.2",
-    "babel-register": "^6.18.0",
     "echint": "^4.0.1",
-    "snazzy": "^6.0.0",
-    "tap": "^10.0.0"
+    "standard": "^10.0.2",
+    "tap": "^10.3.2"
   },
   "dependencies": {
-    "winston": "^2.3.0"
+    "winston": "^2.3.1"
   }
 }
