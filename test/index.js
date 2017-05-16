@@ -84,6 +84,30 @@ test('write entries', assert => {
   }, 50)
 })
 
+test('accepts a custom formatter', assert => {
+  let transport = new Transport({
+    host: '0.0.0.0',
+    port: 1337,
+    formatter: (options) => {
+      return options.message.toUpperCase()
+    }
+  })
+
+  let logger = new winston.Logger({
+    transports: [transport]
+  })
+
+  // dummy data
+  logger.log('info', 'uppercase')
+
+  transport.entryBuffer.drain(entry => assert.equal(entry, 'UPPERCASE'))
+
+  // delay a bit to allow socket connection
+  setTimeout(_ => {
+    transport.disconnect(assert.end)
+  }, 50)
+})
+
 test('buffer entries', assert => {
   let transport = new Transport({
     host: '0.0.0.0',
