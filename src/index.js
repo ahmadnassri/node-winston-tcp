@@ -117,7 +117,8 @@ export default class Transport extends winston.Transport {
       message: msg,
       meta: meta,
       timestamp: this.options.timestamp,
-      json: this.options.json
+      json: this.options.json,
+      formatter: this.options.formatter
     })
 
     this.write(entry, callback)
