@@ -59,21 +59,6 @@ Name                | Description                                               
 `json`              | If `true`, messages will be logged as JSON                                    | `false`
 `timestamp`         | flag indicating if we should prepend output with timestamps                   | `false`
 
-## Targeted Builds
-
-an optimized build is made available for every major Node.js version marked as [Active LTS](https://github.com/nodejs/LTS).
-
-```js
-// Node 7
-const winston-tcp = require('winston-tcp/build/node7')
-
-// Node 6
-const winston-tcp = require('winston-tcp/build/node6')
-
-// Node 4 (Default)
-var winston-tcp = require('winston-tcp')
-```
-
 ---
 > :copyright: [ahmadnassri.com](https://www.ahmadnassri.com/)  · 
 > License: [ISC][license-url]  · 

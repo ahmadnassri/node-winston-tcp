@@ -1,19 +1,21 @@
-import net from 'net'
-import Transport from '../src/index'
-import winston from 'winston'
-import { debuglog } from 'util'
-import { test } from 'tap'
+'use strict'
 
-const debug = debuglog('winston:tcp:test')
+const net = require('net')
+const Transport = require('../lib/index')
+const winston = require('winston')
+const util = require('util')
+const tap = require('tap')
+
+const debug = util.debuglog('winston:tcp:test')
 
 const server = net.createServer(socket => {
   socket.on('data', data => debug('[data]: %s %j', data))
   socket.on('error', err => debug('[error]: %s %j', err))
 })
 
-test('setup', test => server.listen(1337, '127.0.0.1', 10, test.end))
+tap.test('setup', test => server.listen(1337, '127.0.0.1', 10, test.end))
 
-test('no host & port provided', assert => {
+tap.test('no host & port provided', assert => {
   assert.throws(_ => {
     let transport = new Transport()
 
@@ -23,7 +25,7 @@ test('no host & port provided', assert => {
   assert.end()
 })
 
-test('connection management', assert => {
+tap.test('connection management', assert => {
   assert.plan(2)
 
   let transport = new Transport({
@@ -42,7 +44,7 @@ test('connection management', assert => {
   }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
-test('reconnect on failure', assert => {
+tap.test('reconnect on failure', assert => {
   let transport = new Transport({
     host: '0.0.0.0',
     port: 1330, // point to wrong port initially
@@ -62,7 +64,7 @@ test('reconnect on failure', assert => {
   setTimeout(_ => transport.disconnect(assert.end), transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
-test('write entries', assert => {
+tap.test('write entries', assert => {
   let transport = new Transport({
     host: '0.0.0.0',
     port: 1337,
@@ -108,7 +110,7 @@ test('accepts a custom formatter', assert => {
   }, 50)
 })
 
-test('buffer entries', assert => {
+tap.test('buffer entries', assert => {
   let transport = new Transport({
     host: '0.0.0.0',
     // point to wrong port at first
@@ -138,7 +140,7 @@ test('buffer entries', assert => {
   }, transport.options.reconnectInterval * transport.options.reconnectAttempts)
 })
 
-test('buffer => drain', assert => {
+tap.test('buffer => drain', assert => {
   // setup transport
   let transport = new Transport({
     host: '0.0.0.0',
@@ -166,4 +168,4 @@ test('buffer => drain', assert => {
 })
 
 // teardown
-test('teardown', assert => server.close(assert.end))
+tap.test('teardown', assert => server.close(assert.end))
