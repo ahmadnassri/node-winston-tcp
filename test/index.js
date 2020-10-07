@@ -17,7 +17,7 @@ tap.test('setup', test => server.listen(1337, '127.0.0.1', 10, test.end))
 
 tap.test('no host & port provided', assert => {
   assert.throws(_ => {
-    let transport = new Transport()
+    const transport = new Transport()
 
     assert.equal(transport, undefined)
   }, 'should fail')
@@ -28,7 +28,7 @@ tap.test('no host & port provided', assert => {
 tap.test('connection management', assert => {
   assert.plan(2)
 
-  let transport = new Transport({
+  const transport = new Transport({
     host: '0.0.0.0',
     port: 1337,
     reconnectInterval: 50,
@@ -45,7 +45,7 @@ tap.test('connection management', assert => {
 })
 
 tap.test('reconnect on failure', assert => {
-  let transport = new Transport({
+  const transport = new Transport({
     host: '0.0.0.0',
     port: 1330, // point to wrong port initially
     reconnectInterval: 50,
@@ -65,18 +65,18 @@ tap.test('reconnect on failure', assert => {
 })
 
 tap.test('write entries', assert => {
-  let transport = new Transport({
+  const transport = new Transport({
     host: '0.0.0.0',
     port: 1337,
     json: true
   })
 
-  let logger = new winston.Logger({
+  const logger = new winston.Logger({
     transports: [transport]
   })
 
   // dummy data
-  let data = Array.apply(null, { length: 20 }).map(Math.random)
+  const data = Array.apply(null, { length: 20 }).map(Math.random)
   data.forEach(msg => logger.log('info', msg, { yolo: 'foo' }))
 
   // delay a bit to allow socket connection
@@ -87,7 +87,7 @@ tap.test('write entries', assert => {
 })
 
 tap.test('accepts a custom formatter', assert => {
-  let transport = new Transport({
+  const transport = new Transport({
     host: '0.0.0.0',
     port: 1337,
     formatter: (options) => {
@@ -95,7 +95,7 @@ tap.test('accepts a custom formatter', assert => {
     }
   })
 
-  let logger = new winston.Logger({
+  const logger = new winston.Logger({
     transports: [transport]
   })
 
@@ -111,7 +111,7 @@ tap.test('accepts a custom formatter', assert => {
 })
 
 tap.test('buffer entries', assert => {
-  let transport = new Transport({
+  const transport = new Transport({
     host: '0.0.0.0',
     // point to wrong port at first
     port: 1330,
@@ -119,12 +119,12 @@ tap.test('buffer entries', assert => {
     reconnectAttempts: 2
   })
 
-  let logger = new winston.Logger({
+  const logger = new winston.Logger({
     transports: [transport]
   })
 
   // dummy data
-  let data = Array.apply(null, { length: 20 }).map(Math.random)
+  const data = Array.apply(null, { length: 20 }).map(Math.random)
   data.forEach(msg => logger.log('info', msg))
 
   // test
@@ -142,20 +142,20 @@ tap.test('buffer entries', assert => {
 
 tap.test('buffer => drain', assert => {
   // setup transport
-  let transport = new Transport({
+  const transport = new Transport({
     host: '0.0.0.0',
-    port: 1330,  // point to wrong port initially
+    port: 1330, // point to wrong port initially
     reconnectInterval: 100,
     reconnectAttempts: 3
   })
 
   // setup winston
-  let logger = new winston.Logger({
+  const logger = new winston.Logger({
     transports: [transport]
   })
 
   // dummy data
-  let data = Array.apply(null, { length: 20 }).map(Math.random)
+  const data = Array.apply(null, { length: 20 }).map(Math.random)
   data.forEach(msg => logger.log('info', msg))
 
   // set the correct port
