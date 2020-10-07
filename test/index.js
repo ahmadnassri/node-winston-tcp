@@ -49,7 +49,7 @@ tap.test('reconnect on failure', assert => {
     host: '0.0.0.0',
     port: 1330, // point to wrong port initially
     reconnectInterval: 50,
-    reconnectAttempts: 5
+    reconnectAttempts: 3
   })
 
   setTimeout(_ => {
@@ -57,7 +57,7 @@ tap.test('reconnect on failure', assert => {
     transport.options.port = 1337
 
     // test
-    assert.equal(transport.connectionAttempts, transport.options.reconnectAttempts - 1, 'attempted to reconnect 4 times')
+    assert.equal(transport.connectionAttempts, transport.options.reconnectAttempts - 1, 'attempted to reconnect 2 times')
   }, transport.options.reconnectInterval * (transport.options.reconnectAttempts - 1))
 
   // disconnect after the last attempt
