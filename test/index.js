@@ -125,7 +125,7 @@ tap.test('buffer entries', assert => {
 
   // dummy data
   const data = Array.apply(null, { length: 20 }).map(Math.random)
-  data.forEach(msg => logger.log('info', msg))
+  data.forEach(message => logger.log({ level: 'info', message }))
 
   // test
   assert.equal(transport.entryBuffer.length(), 20, '20 entries in buffer')
@@ -156,7 +156,7 @@ tap.test('buffer => drain', assert => {
 
   // dummy data
   const data = Array.apply(null, { length: 20 }).map(Math.random)
-  data.forEach(msg => logger.log('info', msg))
+  data.forEach(message => logger.log({ level: 'info', message }))
 
   // set the correct port
   transport.options.port = 1337
