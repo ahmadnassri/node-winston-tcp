@@ -3,10 +3,10 @@
   "name": "winston-tcp",
   "description": "TCP transport for Winston",
   "author": "Ahmad Nassri <ahmad@ahmadnassri.com> (https://www.ahmadnassri.com/)",
-  "homepage": "https://github.com/ahmadnassri/winston-tcp",
+  "homepage": "https://github.com/ahmadnassri/node-winston-tcp",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ahmadnassri/winston-tcp.git"
+    "url": "https://github.com/ahmadnassri/node-winston-tcp.git"
   },
   "license": "ISC",
   "main": "lib/index.js",
@@ -27,20 +27,18 @@
     "lib"
   ],
   "bugs": {
-    "url": "https://github.com/ahmadnassri/winston-tcp/issues"
+    "url": "https://github.com/ahmadnassri/node-winston-tcp/issues"
   },
   "scripts": {
-    "lint": "standard && echint",
-    "pretest": "npm run lint",
-    "test": "tap test",
-    "coverage": "tap test --reporter silent --coverage"
+    "test": "tap test --no-coverage",
+    "test:watch": "tap test --watch",
+    "test:ci": "tap test --100 --color --coverage-report=lcov --no-browser"
   },
   "devDependencies": {
-    "echint": "^4.0.1",
-    "standard": "^10.0.2",
-    "tap": "^12.0.0"
+    "tap": "^14.10.8"
   },
   "dependencies": {
-    "winston": "^3.0.0"
+    "winston": "^3.3.3",
+    "winston-transport": "^4.4.0"
   }
 }

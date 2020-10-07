@@ -1,9 +1,7 @@
-'use strict'
-
 const EntryBuffer = require('../lib/buffer')
-const tap = require('tap')
+const { test } = require('tap')
 
-tap.test('return current length', assert => {
+test('return current length', assert => {
   const data = Array.apply(null, { length: 20 }).map(Math.random)
 
   const buffer = new EntryBuffer()
@@ -13,7 +11,7 @@ tap.test('return current length', assert => {
   assert.end()
 })
 
-tap.test('don\'t allow more than max entries', assert => {
+test('don\'t allow more than max entries', assert => {
   const data = Array.apply(null, { length: 20 }).map(Math.random)
 
   const buffer = new EntryBuffer(10)
@@ -23,7 +21,7 @@ tap.test('don\'t allow more than max entries', assert => {
   assert.end()
 })
 
-tap.test('should drain without a callback', assert => {
+test('should drain without a callback', assert => {
   const data = Array.apply(null, { length: 10 }).map(Math.random)
 
   const buffer = new EntryBuffer()
@@ -35,7 +33,7 @@ tap.test('should drain without a callback', assert => {
   assert.end()
 })
 
-tap.test('drain with a callback', assert => {
+test('drain with a callback', assert => {
   let counter = 0
   const data = Array.apply(null, { length: 10 }).map(Math.random)
 

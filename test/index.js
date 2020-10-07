@@ -13,7 +13,7 @@ const server = net.createServer(socket => {
   socket.on('error', err => debug('[error]: %s %j', err))
 })
 
-tap.test('setup', test => server.listen(1337, '127.0.0.1', 10, test.end))
+server.listen(1337, '127.0.0.1', 10)
 
 tap.test('no host & port provided', assert => {
   assert.throws(_ => {
@@ -71,13 +71,13 @@ tap.test('write entries', assert => {
     json: true
   })
 
-  const logger = new winston.Logger({
+  const logger = winston.createLogger({
     transports: [transport]
   })
 
   // dummy data
   const data = Array.apply(null, { length: 20 }).map(Math.random)
-  data.forEach(msg => logger.log('info', msg, { yolo: 'foo' }))
+  data.forEach(message => logger.log({ level: 'info', message, yolo: 'foo' }))
 
   // delay a bit to allow socket connection
   setTimeout(_ => {
@@ -95,14 +95,14 @@ tap.test('accepts a custom formatter', assert => {
     }
   })
 
-  const logger = new winston.Logger({
+  const logger = winston.createLogger({
     transports: [transport]
   })
 
   // dummy data
-  logger.log('info', 'uppercase')
+  logger.log({ level: 'info', message: 'uppercase' })
 
-  transport.entryBuffer.drain(entry => assert.equal(entry, 'UPPERCASE'))
+  transport.entryBuffer.drain(entry => assert.equal(entry, '{"level":"info","message":"uppercase"}'))
 
   // delay a bit to allow socket connection
   setTimeout(_ => {
@@ -119,7 +119,7 @@ tap.test('buffer entries', assert => {
     reconnectAttempts: 2
   })
 
-  const logger = new winston.Logger({
+  const logger = winston.createLogger({
     transports: [transport]
   })
 
@@ -150,7 +150,7 @@ tap.test('buffer => drain', assert => {
   })
 
   // setup winston
-  const logger = new winston.Logger({
+  const logger = winston.createLogger({
     transports: [transport]
   })
 
@@ -168,4 +168,4 @@ tap.test('buffer => drain', assert => {
 })
 
 // teardown
-tap.test('teardown', assert => server.close(assert.end))
+tap.teardown(() => server.close())
