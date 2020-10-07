@@ -1,4 +1,4 @@
-# Winston TCP [![version][npm-version]][npm-url] [![License][license-image]][license-url]
+# Winston TCP
 
 > TCP transport for [Winston](https://github.com/winstonjs/winston)
 
